@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>STUMARI • Digital Concierge</title>
+  
+  <!-- Premium Fonts: Playfair Display + Noto Serif/Sans Georgian for authentic Georgian luxury + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+Georgian:wght@300;400;500;600;700&family=Noto+Serif+Georgian:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#C5A059',
+              goldHover: '#B58E45',
+              goldLight: '#E8D5A3',
+              darkBg: '#0B1114',
+              darkCard: '#131D21',
+              darkCardSubtle: '#1A262B',
+              darkBorder: 'rgba(197, 160, 89, 0.22)',
+              lightBg: '#F8F6F0',
+              lightCard: '#FFFFFF',
+              lightCardSubtle: '#F0ECE1',
+              lightBorder: 'rgba(197, 160, 89, 0.35)',
+              lightText: '#1C1917',
+              lightMuted: '#686057'
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', '"Noto Serif Georgian"', 'Georgia', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Georgian"', 'system-ui', 'sans-serif'],
+            georgian: ['"Noto Serif Georgian"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons & QR Code Generator -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Georgian', sans-serif;
+      overscroll-behavior-y: contain;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Luxury Dark Mode Specifics */
+    .dark body {
+      background-color: #080D0F;
+      color: #E6E9EA;
+    }
+    .dark .app-container {
+      background-color: #0B1114;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .dark .glass-header {
+      background: rgba(11, 17, 20, 0.92);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .dark .glass-gold-card {
+      background: linear-gradient(135deg, rgba(197, 160, 89, 0.12) 0%, rgba(19, 29, 33, 0.9) 100%);
+      border: 1px solid rgba(197, 160, 89, 0.3);
+    }
+    .dark .item-card {
+      background: rgba(19, 29, 33, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .dark .item-card:hover {
+      border-color: rgba(197, 160, 89, 0.35);
+    }
+    .dark .bottom-nav {
+      background: rgba(11, 17, 20, 0.95);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .dark .dialog-sheet {
+      background: #10191D;
+      border-color: rgba(197, 160, 89, 0.25);
+    }
+
+    /* Luxury Light Mode (Boutique Linen & Warm Cream) */
+    html:not(.dark) body {
+      background-color: #F0ECE1;
+      color: #26221D;
+    }
+    html:not(.dark) .app-container {
+      background-color: #F9F7F2;
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+    html:not(.dark) .glass-header {
+      background: rgba(249, 247, 242, 0.94);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    html:not(.dark) .glass-gold-card {
+      background: linear-gradient(135deg, #FFFDF8 0%, #F5EEDB 100%);
+      border: 1px solid rgba(197, 160, 89, 0.45);
+      box-shadow: 0 4px 20px -2px rgba(197, 160, 89, 0.15);
+    }
+    html:not(.dark) .item-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.03);
+    }
+    html:not(.dark) .item-card:hover {
+      border-color: rgba(197, 160, 89, 0.5);
+    }
+    html:not(.dark) .bottom-nav {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.03);
+    }
+    html:not(.dark) .dialog-sheet {
+      background: #FFFFFF;
+      border-color: rgba(197, 160, 89, 0.35);
+    }
+
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Transitions */
+    .sheet-transition {
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    @keyframes toastFade {
+      from { transform: translate(-50%, 25px) scale(0.92); opacity: 0; }
+      to { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    }
+    .toast-animate {
+      animation: toastFade 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex justify-center selection:bg-amber-500/20 selection:text-amber-300">
+
+  <!-- Mobile Screen Shell -->
+  <div class="app-container w-full max-w-md min-h-screen flex flex-col relative pb-28 shadow-2xl border-x transition-colors duration-300">
+
+    <!-- Top Luxury Header with Stumari branding, property selector, lang pill & dark mode switch -->
+    <header class="glass-header sticky top-0 z-40 px-4 py-3 border-b flex items-center justify-between transition-colors duration-300 backdrop-blur-md">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-full border border-brand-gold flex items-center justify-center bg-gradient-to-tr from-amber-900/30 to-amber-500/20 text-brand-gold shadow-sm">
+          <i data-lucide="compass" class="w-4 h-4"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-1.5">
+            <span class="font-cinzel tracking-wider text-xs font-bold text-amber-500 dark:text-amber-300">STUMARI</span>
+            <span class="text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold border border-amber-500/20">Pilot</span>
+          </div>
+          <p class="text-[10px] text-stone-500 dark:text-stone-400 font-medium" data-i18n="tagline">Digital Concierge</p>
+        </div>
+      </div>
+
+      <!-- Controls: Property Picker, Language Switcher, Theme Switcher -->
+      <div class="flex items-center space-x-1.5">
+        <!-- Property Switcher Trigger -->
+        <button id="switchPropBtn" class="flex items-center space-x-1 text-xs bg-stone-200/80 hover:bg-stone-300/80 dark:bg-stone-800/80 dark:hover:bg-stone-700/80 text-stone-800 dark:text-stone-200 px-2 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 transition">
+          <span class="max-w-[80px] truncate font-medium text-[11px]" id="currentPropertyLabel">Elia Hostel</span>
+          <i data-lucide="chevron-down" class="w-3 h-3 text-stone-400"></i>
+        </button>
+
+        <!-- Language Selector -->
+        <button id="openLangBtn" class="flex items-center space-x-1 text-xs font-bold px-2 py-1.5 rounded-full bg-stone-200/80 hover:bg-stone-300/80 dark:bg-stone-800/80 dark:hover:bg-stone-700/80 text-amber-700 dark:text-amber-400 border border-stone-300 dark:border-stone-700 transition">
+          <span id="langFlag">🇬🇧</span>
+          <span id="currentLangCode" class="text-[11px]">EN</span>
+        </button>
+
+        <!-- Theme Toggle (Dark / Light) -->
+        <button id="themeToggleBtn" aria-label="Toggle Theme" class="w-8 h-8 rounded-full flex items-center justify-center bg-stone-200/80 dark:bg-stone-800/80 text-stone-700 dark:text-amber-300 border border-stone-300 dark:border-stone-700 transition">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 flex flex-col">
+
+      <!-- ================= SCREEN 1: HOME TAB ================= -->
+      <section id="tab-home" class="tab-view flex flex-col space-y-4">
+        
+        <!-- Hero Photo with Scrim and Dynamic Name -->
+        <div class="relative w-full h-64 overflow-hidden group">
+          <img id="propertyHeroImg" 
+               src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=900&q=80" 
+               alt="Property view" 
+               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+               onerror="this.src='https://placehold.co/600x400/131D21/C5A059?text=STUMARI+Hotel'">
+          
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0B1114] via-[#0B1114]/40 to-black/30 dark:block hidden"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#F9F7F2] via-[#F9F7F2]/40 to-black/20 dark:hidden block"></div>
+
+          <div class="absolute bottom-3 left-4 right-4">
+            <div class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-black/60 dark:bg-black/70 backdrop-blur-md border border-white/10 text-[11px] text-amber-300 mb-1.5">
+              <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+              <span id="propertyBadge" class="font-semibold">4.9 ★ Exceptional Host</span>
+            </div>
+            
+            <h1 id="propertyName" class="font-serif text-2xl font-bold tracking-tight text-white dark:text-white drop-shadow leading-tight">
+              Elia Boutique Hostel
+            </h1>
+            
+            <!-- Interactive Clickable Address with External Maps Trigger -->
+            <button id="heroAddressBtn" class="mt-1 flex items-center space-x-1.5 text-xs text-stone-200 hover:text-amber-300 transition text-left group/addr drop-shadow">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>
+              <span id="propertyAddress" class="underline decoration-stone-400 underline-offset-2">12 Kaishauri Street, Avlabari, Tbilisi</span>
+              <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-70 group-hover/addr:translate-x-0.5 group-hover/addr:-translate-y-0.5 transition"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="px-4">
+          <div class="glass-gold-card rounded-2xl p-4 relative overflow-hidden transition-all duration-300">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-brand-gold flex items-center justify-center text-amber-600 dark:text-brand-gold shadow-sm">
+                  <i data-lucide="wifi" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-[11px] uppercase font-cinzel tracking-wider text-amber-700 dark:text-brand-gold font-bold" data-i18n="wifiTitle">Zero-Click Wi-Fi</span>
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </div>
+                  <h3 id="wifiSsidDisplay" class="font-bold text-stone-900 dark:text-stone-100 text-sm tracking-wide">Elia_Hostel_Guest</h3>
+                </div>
+              </div>
+
+              <!-- Open QR Code Button -->
+              <button id="openWifiQrModalBtn" title="QR Code" class="p-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-brand-gold transition active:scale-95">
+                <i data-lucide="qr-code" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <div class="mt-3.5 pt-3 border-t border-amber-500/20 flex items-center justify-between bg-stone-900/5 dark:bg-black/35 rounded-xl px-3 py-2">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs text-stone-500 dark:text-stone-400" data-i18n="passLabel">Password:</span>
+                <span id="wifiPasswordText" class="font-mono text-xs font-bold text-stone-800 dark:text-amber-100 tracking-wider">EliaWelcome2026</span>
+              </div>
+              <button id="copyWifiPasswordBtn" class="flex items-center space-x-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-md transition active:scale-95">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span data-i18n="copyBtn">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Welcome Message from Host -->
+        <div class="px-4">
+          <div class="item-card p-3.5 rounded-xl flex items-start space-x-3">
+            <div class="w-9 h-9 rounded-full bg-amber-500/20 border border-brand-gold flex-shrink-0 flex items-center justify-center text-amber-700 dark:text-amber-300 font-cinzel text-xs font-bold" id="hostAvatar">
+              EG
+            </div>
+            <div class="text-xs text-stone-700 dark:text-stone-300 leading-relaxed">
+              <span class="font-bold text-amber-600 dark:text-amber-300" id="hostTitle">Giorgi & Family:</span>
+              <p id="hostWelcomeMessage" class="mt-0.5 text-stone-600 dark:text-stone-400">
+                Welcome to Elia Boutique Hostel! Your home in historic Tbilisi. Use this guide to find everything you need during your stay.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-4">
+          <div class="flex items-center justify-between mb-2.5">
+            <h2 class="font-serif text-base font-bold text-stone-900 dark:text-stone-100" data-i18n="guestEssentialsTitle">Guest Essentials</h2>
+            <span class="text-[11px] text-stone-500 dark:text-stone-400" data-i18n="tapToOpen">Tap for details</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5">
+            <!-- 1. Check-In -->
+            <button onclick="openModal('checkin')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="key" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navCheckin">Check-In</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" id="gridCheckinTime">14:00</span>
+            </button>
+
+            <!-- 2. Check-Out -->
+            <button onclick="openModal('checkout')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navCheckout">Check-Out</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" id="gridCheckoutTime">12:00</span>
+            </button>
+
+            <!-- 3. House Rules -->
+            <button onclick="openModal('rules')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navRules">House Rules</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="rulesBrief">Quiet hours</span>
+            </button>
+
+            <!-- 4. Amenities -->
+            <button onclick="openModal('amenities')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="coffee" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navAmenities">Amenities</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="amenitiesBrief">Kitchen & AC</span>
+            </button>
+
+            <!-- 5. Transport & Airport -->
+            <button onclick="openModal('transport')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="car" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navTransport">Transfers</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="transportBrief">Airport & Bolt</span>
+            </button>
+
+            <!-- 6. Luggage & Storage -->
+            <button onclick="openModal('luggage')" class="item-card p-3 rounded-xl flex flex-col items-center text-center group transition active:scale-95">
+              <div class="w-9 h-9 rounded-full bg-amber-500/10 group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-1.5 transition">
+                <i data-lucide="luggage" class="w-4 h-4"></i>
+              </div>
+              <span class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="navLuggage">Luggage</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="luggageBrief">Free storage</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Featured Nearby Spots Preview -->
+        <div class="px-4">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="font-serif text-base font-bold text-stone-900 dark:text-stone-100" data-i18n="nearbyTitle">Host Recommendations</h2>
+            <button onclick="switchTab('explore')" class="text-xs text-amber-600 dark:text-amber-400 hover:underline font-bold flex items-center space-x-1">
+              <span data-i18n="viewAll">View all</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <div class="flex space-x-3 overflow-x-auto hide-scrollbar pb-1" id="homeMiniHighlights">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Georgia Unified 112 Emergency Banner -->
+        <div class="px-4">
+          <a href="tel:112" class="w-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-2xl p-3.5 flex items-center justify-between text-red-700 dark:text-red-300 transition">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center text-red-600 dark:text-red-400 flex-shrink-0">
+                <i data-lucide="phone-call" class="w-4 h-4"></i>
+              </div>
+              <div class="text-left">
+                <div class="text-xs font-bold" data-i18n="emergency112Title">Georgia Unified Emergency (112)</div>
+                <div class="text-[10px] opacity-80" data-i18n="emergency112Subtitle">Police • Ambulance • Fire | 24/7 EN/GE/RU</div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 bg-red-600 text-white rounded-lg text-xs font-bold font-mono">112</span>
+          </a>
+        </div>
+
+      </section>
+
+      <!-- ================= SCREEN 2: EXPLORE TAB ================= -->
+      <section id="tab-explore" class="tab-view hidden flex-col px-4 pt-3 space-y-4">
+        <div>
+          <h2 class="font-serif text-xl font-bold text-stone-900 dark:text-stone-100" data-i18n="exploreHeading">Explore Tbilisi</h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="exploreSubheading">Handpicked authentic spots • Walking distances from your stay</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex space-x-2 overflow-x-auto hide-scrollbar py-1" id="categoryFilterContainer">
+          <button onclick="setExploreFilter('all')" class="cat-filter-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-stone-950 transition whitespace-nowrap" data-i18n="catAll">All</button>
+          <button onclick="setExploreFilter('eat')" class="cat-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition whitespace-nowrap" data-i18n="catEat">Georgian Food</button>
+          <button onclick="setExploreFilter('drink')" class="cat-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition whitespace-nowrap" data-i18n="catDrink">Cafés & Wine</button>
+          <button onclick="setExploreFilter('visit')" class="cat-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition whitespace-nowrap" data-i18n="catVisit">Attractions</button>
+          <button onclick="setExploreFilter('transport')" class="cat-filter-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition whitespace-nowrap" data-i18n="catTransport">Transport</button>
+        </div>
+
+        <!-- Filtered List Container -->
+        <div class="flex flex-col space-y-3" id="explorePlacesList">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ================= SCREEN 3: HELP & CONTACT TAB ================= -->
+      <section id="tab-help" class="tab-view hidden flex-col px-4 pt-3 space-y-4">
+        <div>
+          <h2 class="font-serif text-xl font-bold text-stone-900 dark:text-stone-100" data-i18n="helpHeading">Host Assistance</h2>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5" data-i18n="helpSubheading">Direct communication with property hosts & concierge</p>
+        </div>
+
+        <!-- Host Contact Box -->
+        <div class="item-card rounded-2xl p-5 border border-brand-gold text-center relative overflow-hidden">
+          <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-amber-600 to-brand-gold p-0.5 shadow-md mb-2.5">
+            <div class="w-full h-full rounded-full bg-stone-900 flex items-center justify-center text-amber-300 font-cinzel text-lg font-bold" id="helpHostInitials">
+              EG
+            </div>
+          </div>
+
+          <h3 class="font-serif text-lg font-bold text-stone-900 dark:text-stone-100" id="helpHostName">Eliana & Giorgi</h3>
+          <p class="text-xs text-amber-600 dark:text-amber-400 font-semibold" id="helpHostRole">Your Local Hosts</p>
+          <p class="text-xs text-stone-600 dark:text-stone-400 mt-2 max-w-xs mx-auto leading-relaxed" data-i18n="hostHelpBlurb">
+            Need an extra towel, heating adjustments, recommendations or airport taxi booking? We are right here!
+          </p>
+
+          <div class="grid grid-cols-2 gap-3 mt-4">
+            <!-- WhatsApp Link -->
+            <a id="helpWhatsappBtn" href="https://wa.me/995555445216" target="_blank" class="flex items-center justify-center space-x-2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition active:scale-95">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+              <span>WhatsApp</span>
+            </a>
+
+            <!-- Direct Call -->
+            <a id="helpPhoneBtn" href="tel:+995555445216" class="flex items-center justify-center space-x-2 py-2.5 px-3 rounded-xl bg-stone-200 hover:bg-stone-300 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 border border-stone-300 dark:border-stone-700 text-xs font-bold transition active:scale-95">
+              <i data-lucide="phone" class="w-4 h-4"></i>
+              <span data-i18n="callHostBtn">Direct Call</span>
+            </a>
+          </div>
+
+          <p class="text-[10px] text-stone-400 mt-3 font-medium" data-i18n="hostResponseTime">Front desk & WhatsApp monitored 24/7</p>
+        </div>
+
+        <!-- Georgia Unified 112 Explanation -->
+        <div class="p-4 rounded-2xl bg-stone-200/50 dark:bg-stone-900/80 border border-stone-300 dark:border-stone-800 space-y-2.5">
+          <div class="flex items-center space-x-2 text-red-600 dark:text-red-400">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            <h4 class="font-bold text-xs uppercase tracking-wide" data-i18n="emergencyInfoTitle">Emergency Service (Georgia 112)</h4>
+          </div>
+
+          <p class="text-xs text-stone-600 dark:text-stone-400 leading-relaxed" data-i18n="emergencyInfoDesc">
+            Georgia operates a single unified emergency hotline: <strong class="text-red-600 dark:text-red-400 font-mono">112</strong>. Dialing 112 instantly connects to Police, Ambulance, and Fire Brigade. Operators speak English, Georgian, and Russian fluently.
+          </p>
+
+          <a href="tel:112" class="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-md transition">
+            <i data-lucide="phone-outgoing" class="w-4 h-4"></i>
+            <span data-i18n="call112Btn">Call 112 Directly</span>
+          </a>
+        </div>
+
+        <!-- Travel Tips Box -->
+        <div class="p-4 rounded-2xl bg-stone-200/50 dark:bg-stone-900/80 border border-stone-300 dark:border-stone-800 space-y-2">
+          <h4 class="text-xs font-bold text-stone-800 dark:text-stone-200" data-i18n="quickTipsTitle">Quick Tbilisi Tips:</h4>
+          <ul class="text-xs text-stone-600 dark:text-stone-400 space-y-1.5 list-disc list-inside">
+            <li data-i18n="tipTaxi"><strong>Taxi:</strong> We recommend <span class="text-amber-600 dark:text-amber-400 font-semibold">Bolt</span> (cards accepted, transparent pricing).</li>
+            <li data-i18n="tipWater"><strong>Tap Water:</strong> Tbilisi tap water is cold mountain water and safe to drink.</li>
+            <li data-i18n="tipSubway"><strong>Metro & Bus:</strong> Tap any standard contactless Visa or Mastercard at turnstiles (1.00 GEL).</li>
+          </ul>
+        </div>
+      </section>
+
+    </main>
+
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40 px-6 py-2.5 flex justify-around items-center border-t transition-colors duration-300">
+      <button onclick="switchTab('home')" id="nav-btn-home" class="nav-item active flex flex-col items-center space-y-1 text-amber-500 dark:text-brand-gold transition">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[11px] font-bold" data-i18n="tabHome">Home</span>
+      </button>
+
+      <button onclick="switchTab('explore')" id="nav-btn-explore" class="nav-item flex flex-col items-center space-y-1 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+        <span class="text-[11px] font-semibold" data-i18n="tabExplore">Explore</span>
+      </button>
+
+      <button onclick="switchTab('help')" id="nav-btn-help" class="nav-item flex flex-col items-center space-y-1 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 transition">
+        <i data-lucide="message-circle" class="w-5 h-5"></i>
+        <span class="text-[11px] font-semibold" data-i18n="tabHelp">Help</span>
+      </button>
+    </nav>
+
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-end justify-center">
+      <div id="modalSheet" class="dialog-sheet w-full max-w-md border-t rounded-t-3xl p-6 shadow-2xl transform translate-y-full sheet-transition max-h-[85vh] flex flex-col">
+        <div class="w-12 h-1 bg-stone-300 dark:bg-stone-700 rounded-full mx-auto mb-4 flex-shrink-0 cursor-pointer" onclick="closeModal()"></div>
+        
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800 flex-shrink-0">
+          <div class="flex items-center space-x-2.5">
+            <div id="modalIconContainer" class="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <i data-lucide="info" class="w-4 h-4" id="modalHeaderIcon"></i>
+            </div>
+            <h3 id="modalTitle" class="font-serif text-lg font-bold text-stone-900 dark:text-stone-100">Details</h3>
+          </div>
+          <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div id="modalBody" class="mt-4 text-xs text-stone-700 dark:text-stone-300 space-y-3 overflow-y-auto hide-scrollbar flex-1 leading-relaxed">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Wi-Fi QR Code Modal -->
+    <div id="qrModalBackdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+      <div id="qrModalBox" class="dialog-sheet w-full max-w-xs border rounded-2xl p-5 shadow-2xl text-center transform scale-95 transition-transform duration-300">
+        <h3 class="font-serif text-base font-bold text-stone-900 dark:text-stone-100" data-i18n="scanWifiTitle">Scan to Connect Wi-Fi</h3>
+        <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1" data-i18n="scanWifiDesc">Point your phone's camera at this code to join automatically without typing.</p>
+        
+        <div class="my-4 p-3 bg-white rounded-xl inline-block shadow-inner mx-auto" id="qrcode"></div>
+        
+        <div class="text-xs text-stone-700 dark:text-stone-300 bg-stone-100 dark:bg-stone-900 p-2 rounded-lg font-mono">
+          SSID: <span id="qrSsidLabel" class="text-amber-600 dark:text-amber-400 font-bold">Elia_Hostel_Guest</span>
+        </div>
+
+        <button onclick="closeQrModal()" class="mt-4 w-full py-2 bg-stone-200 hover:bg-stone-300 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 rounded-xl text-xs font-bold transition">
+          <span data-i18n="closeBtn">Close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Picker Modal (Dossiers) -->
+    <div id="propPickerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+      <div class="dialog-sheet w-full max-w-sm border rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
+          <div>
+            <h3 class="font-serif text-base font-bold text-stone-900 dark:text-stone-100" data-i18n="selectPropertyTitle">Select Demo Property</h3>
+            <p class="text-[10px] text-stone-500 dark:text-stone-400" data-i18n="selectPropertySub">Switch instantly between pilot venues</p>
+          </div>
+          <button onclick="closePropPicker()" class="w-7 h-7 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="mt-3 space-y-2 overflow-y-auto hide-scrollbar flex-1" id="propertyOptionsList">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Language Picker Modal -->
+    <div id="langPickerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+      <div class="dialog-sheet w-full max-w-xs border rounded-2xl p-5 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
+          <h3 class="font-serif text-base font-bold text-stone-900 dark:text-stone-100">Choose Language / ენა</h3>
+          <button onclick="closeLangPicker()" class="w-7 h-7 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-500 dark:text-stone-400 flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="mt-3 space-y-2">
+          <button onclick="setLanguage('EN')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-amber-500/10 border border-stone-200 dark:border-stone-800 transition">
+            <div class="flex items-center space-x-3">
+              <span class="text-xl">🇬🇧</span>
+              <div class="text-left">
+                <div class="text-xs font-bold text-stone-900 dark:text-stone-100">English</div>
+                <div class="text-[10px] text-stone-500">Default for international travelers</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-amber-500 font-bold">EN</span>
+          </button>
+
+          <button onclick="setLanguage('KA')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-amber-500/10 border border-stone-200 dark:border-stone-800 transition">
+            <div class="flex items-center space-x-3">
+              <span class="text-xl">🇬🇪</span>
+              <div class="text-left">
+                <div class="text-xs font-bold text-stone-900 dark:text-stone-100">ქართული</div>
+                <div class="text-[10px] text-stone-500">სტუმრის სრული გზამკვლევი</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-amber-500 font-bold">KA</span>
+          </button>
+
+          <button onclick="setLanguage('RU')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-amber-500/10 border border-stone-200 dark:border-stone-800 transition">
+            <div class="flex items-center space-x-3">
+              <span class="text-xl">🌐</span>
+              <div class="text-left">
+                <div class="text-xs font-bold text-stone-900 dark:text-stone-100">Русский</div>
+                <div class="text-[10px] text-stone-500">Гид и помощь гостю</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-amber-500 font-bold">RU</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 hidden toast-animate bg-amber-500 text-stone-950 px-4 py-2 rounded-full font-bold text-xs shadow-2xl flex items-center space-x-2 border border-amber-400">
+      <i data-lucide="check-circle" class="w-4 h-4 text-stone-950"></i>
+      <span id="toastMsg">Password copied!</span>
+    </div>
+
+  </div>
+
+  <script>
+    // Complete Trilingual UI Translations Dictionary
+    const I18N = {
+      EN: {
+        tagline: "Digital Concierge",
+        wifiTitle: "Zero-Click Wi-Fi",
+        passLabel: "Password:",
+        copyBtn: "Copy",
+        copiedToast: "Wi-Fi Password copied to clipboard!",
+        guestEssentialsTitle: "Guest Essentials",
+        tapToOpen: "Tap for details",
+        navCheckin: "Check-In",
+        navCheckout: "Check-Out",
+        navRules: "House Rules",
+        rulesBrief: "Quiet hours",
+        navAmenities: "Amenities",
+        amenitiesBrief: "Kitchen & AC",
+        navTransport: "Transfers",
+        transportBrief: "Airport & Bolt",
+        navLuggage: "Luggage",
+        luggageBrief: "Free storage",
+        nearbyTitle: "Host Recommendations",
+        viewAll: "View all",
+        emergency112Title: "Georgia Unified Emergency (112)",
+        emergency112Subtitle: "Police • Ambulance • Fire | 24/7 EN/GE/RU",
+        exploreHeading: "Explore Tbilisi",
+        exploreSubheading: "Handpicked authentic spots • Walking distances from your stay",
+        catAll: "All",
+        catEat: "Georgian Food",
+        catDrink: "Cafés & Wine",
+        catVisit: "Attractions",
+        catTransport: "Transport",
+        helpHeading: "Host Assistance",
+        helpSubheading: "Direct communication with property hosts & concierge",
+        callHostBtn: "Direct Call",
+        hostHelpBlurb: "Need an extra towel, heating adjustments, recommendations or airport taxi booking? We are right here!",
+        hostResponseTime: "Front desk & WhatsApp monitored 24/7",
+        emergencyInfoTitle: "Emergency Service (Georgia 112)",
+        emergencyInfoDesc: "Georgia operates a single unified emergency hotline: 112. Dialing 112 instantly connects to Police, Ambulance, and Fire Brigade. Operators speak English, Georgian, and Russian fluently.",
+        call112Btn: "Call 112 Directly",
+        quickTipsTitle: "Quick Tbilisi Tips:",
+        tipTaxi: "Taxi: We recommend Bolt app (cards accepted, transparent pricing).",
+        tipWater: "Tap Water: Tbilisi tap water is cold mountain water and safe to drink.",
+        tipSubway: "Metro & Bus: Tap any standard contactless Visa or Mastercard at turnstiles (1.00 GEL).",
+        tabHome: "Home",
+        tabExplore: "Explore",
+        tabHelp: "Help",
+        scanWifiTitle: "Scan to Connect Wi-Fi",
+        scanWifiDesc: "Point your phone's camera at this code to join automatically without typing.",
+        closeBtn: "Close",
+        selectPropertyTitle: "Select Demo Property",
+        selectPropertySub: "Switch instantly between pilot venues",
+        openMapsBtn: "View on Google Maps"
+      },
+      KA: {
+        tagline: "სტუმრის გზამკვლევი",
+        wifiTitle: "სწრაფი Wi-Fi",
+        passLabel: "პაროლი:",
+        copyBtn: "კოპირება",
+        copiedToast: "Wi-Fi პაროლი დაკოპირებულია!",
+        guestEssentialsTitle: "საჭირო ინფორმაცია",
+        tapToOpen: "დეტალების სანახავად დააჭირეთ",
+        navCheckin: "რეგისტრაცია",
+        navCheckout: "გასვლა",
+        navRules: "წესები",
+        rulesBrief: "სიმშვიდის საათები",
+        navAmenities: "სერვისები",
+        amenitiesBrief: "კონდიციონერი & სამზარეულო",
+        navTransport: "ტრანსფერი",
+        transportBrief: "აეროპორტი & Bolt",
+        navLuggage: "ბარგი",
+        luggageBrief: "უფასო შენახვა",
+        nearbyTitle: "მასპინძლის რეკომენდაციები",
+        viewAll: "ყველას ნახვა",
+        emergency112Title: "საქართველოს 112 (საგანგებო)",
+        emergency112Subtitle: "პოლიცია • სასწრაფო • სახანძრო | 24/7",
+        exploreHeading: "აღმოაჩინე თბილისი",
+        exploreSubheading: "საუკეთესო ადგილები თქვენს გარშემო • ფეხით სავალ მანძილზე",
+        catAll: "ყველა",
+        catEat: "ქართული სამზარეულო",
+        catDrink: "ყავა და ღვინო",
+        catVisit: "ღირსშესანიშნაობები",
+        catTransport: "ტრანსპორტი",
+        helpHeading: "დახმარება & კონტაქტი",
+        helpSubheading: "პირდაპირი კავშირი თქვენს მასპინძელთან",
+        callHostBtn: "დარეკვა",
+        hostHelpBlurb: "გჭირდებათ დამატებითი პირსახოცი, რჩევა ან აეროპორტის ტაქსი? მოგვწერეთ ნებისმიერ დროს!",
+        hostResponseTime: "ადმინისტრაცია / WhatsApp მუშაობს 24/7",
+        emergencyInfoTitle: "ერთიანი საგანგებო ნომერი (112)",
+        emergencyInfoDesc: "საქართველოში მოქმედებს ერთიანი გადაუდებელი დახმარების ნომერი: 112 (პოლიცია, სასწრაფო სამედიცინო დახმარება და სახანძრო-სამაშველო სამსახური). ოპერატორები საუბრობენ ქართულ, ინგლისურ და რუსულ ენებზე.",
+        call112Btn: "112-ზე დარეკვა",
+        quickTipsTitle: "სასარგებლო რჩევები თბილისში:",
+        tipTaxi: "ტაქსი: რეკომენდებულია Bolt აპლიკაციის გამოყენება (ბარათით გადახდა, ფიქსირებული ტარიფი).",
+        tipWater: "ონკანის წყალი: თბილისში ონკანის წყალი სასმელად სრულიად უსაფრთხოა.",
+        tipSubway: "მეტრო და ავტობუსი: გადახდა შესაძლებელია ნებისმიერი საბანკო ბარათით (Visa / Mastercard) - 1.00 ლარი.",
+        tabHome: "მთავარი",
+        tabExplore: "ადგილები",
+        tabHelp: "კონტაქტი",
+        scanWifiTitle: "Wi-Fi-სთან დაკავშირება",
+        scanWifiDesc: "მიუშვირეთ ტელეფონის კამერა QR კოდს ავტომატური დაკავშირებისთვის.",
+        closeBtn: "დახურვა",
+        selectPropertyTitle: "აირჩიეთ ობიექტის დემო",
+        selectPropertySub: "გადართეთ სასტუმროს გზამკვლევი მომენტალურად",
+        openMapsBtn: "რუკაზე ნახვა"
+      },
+      RU: {
+        tagline: "Цифровой консьерж",
+        wifiTitle: "Быстрый Wi-Fi",
+        passLabel: "Пароль:",
+        copyBtn: "Копировать",
+        copiedToast: "Пароль от Wi-Fi скопирован!",
+        guestEssentialsTitle: "Главное для гостя",
+        tapToOpen: "Нажмите для подробностей",
+        navCheckin: "Заезд",
+        navCheckout: "Выезд",
+        navRules: "Правила",
+        rulesBrief: "Часы тишины",
+        navAmenities: "Удобства",
+        amenitiesBrief: "Кухня и кондиционер",
+        navTransport: "Трансфер",
+        transportBrief: "Аэропорт и Bolt",
+        navLuggage: "Багаж",
+        luggageBrief: "Бесплатное хранение",
+        nearbyTitle: "Рекомендации хозяев",
+        viewAll: "Смотреть все",
+        emergency112Title: "Единая служба спасения Грузии (112)",
+        emergency112Subtitle: "Полиция • Скорая • Пожарные | 24/7 EN/GE/RU",
+        exploreHeading: "Гид по Тбилиси",
+        exploreSubheading: "Проверенные места рядом • В пешей доступности",
+        catAll: "Все",
+        catEat: "Грузинская кухня",
+        catDrink: "Кофе и вино",
+        catVisit: "Достопримечательности",
+        catTransport: "Транспорт",
+        helpHeading: "Связь с хозяевами",
+        helpSubheading: "Прямой контакт с администрацией и помощь",
+        callHostBtn: "Позвонить",
+        hostHelpBlurb: "Нужно дополнительное полотенце, помощь с обогревом или трансфер в аэропорт? Напишите нам в WhatsApp!",
+        hostResponseTime: "Ресепшн и WhatsApp на связи 24/7",
+        emergencyInfoTitle: "Единый номер экстренных служб (112)",
+        emergencyInfoDesc: "В Грузии действует единая служба спасения 112 (Полиция, Скорая медицинская помощь и Пожарные). Операторы свободно говорят на русском, английском и грузинском языках.",
+        call112Btn: "Позвонить в 112",
+        quickTipsTitle: "Полезные советы в Тбилиси:",
+        tipTaxi: "Такси: используйте приложение Bolt (оплата картой, честные цены без переплат).",
+        tipWater: "Вода: вода из-под крана в Тбилиси безопасна для питья.",
+        tipSubway: "Метро и автобусы: оплачивайте любой банковской картой Visa / Mastercard на турникете (1.00 лари).",
+        tabHome: "Главная",
+        tabExplore: "Места",
+        tabHelp: "Помощь",
+        scanWifiTitle: "Подключение к Wi-Fi",
+        scanWifiDesc: "Наведите камеру смартфона на QR-код для автоматического подключения к сети.",
+        closeBtn: "Закрыть",
+        selectPropertyTitle: "Выбор объекта (Демо)",
+        selectPropertySub: "Мгновенное переключение между отелями",
+        openMapsBtn: "Открыть в Google Maps"
+      }
+    };
+
+    // Full 5 Properties Dossiers with Verified Details & Translations
+    const PROPERTIES_DATA = {
+      elia: {
+        id: "elia",
+        name: {
+          EN: "Elia Boutique Hostel",
+          KA: "Elia Boutique Hostel",
+          RU: "Elia Boutique Hostel"
+        },
+        badge: {
+          EN: "4.9 ★ Family-Run Boutique Hostel",
+          KA: "4.9 ★ საოჯახო ბუტიკ-ჰოსტელი",
+          RU: "4.9 ★ Семейный бутик-хостел"
+        },
+        address: "12 Kaishauri Street, Avlabari, Tbilisi 0103",
+        mapsQuery: "12+Kaishauri+St+Tbilisi",
+        image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=900&q=80",
+        wifi: {
+          ssid: "Elia_Hostel_Guest",
+          pass: "EliaWelcome2026"
+        },
+        host: {
+          name: "Eliana & Giorgi",
+          initials: "EG",
+          role: {
+            EN: "Host & Reception",
+            KA: "მასპინძელი და ადმინისტრაცია",
+            RU: "Хозяева и консьерж"
+          },
+          phone: "+995555445216",
+          phoneDisplay: "+995 555 445 216",
+          whatsapp: "995555445216",
+          welcome: {
+            EN: "Welcome to Elia Boutique Hostel! Your home in historic Tbilisi. We are here 24/7 to help you experience Tbilisi beyond the usual tourist spots.",
+            KA: "მოგესალმებით Elia Boutique Hostel-ში! თქვენი მყუდრო სახლი ისტორიულ თბილისში. მზად ვართ დაგეხმაროთ ნებისმიერ დროს.",
+            RU: "Добро пожаловать в Elia Boutique Hostel! Ваш уютный дом в историческом Тбилиси. Мы всегда на связи 24/7, чтобы сделать ваш отдых идеальным."
+          }
+        },
+        times: { checkin: "14:00", checkout: "12:00" },
+        modals: {
+          checkin: {
+            title: { EN: "Check-in Instructions", KA: "რეგისტრაციის წესები", RU: "Инструкция по заезду" },
+            html: {
+              EN: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">Standard Check-In: From 14:00</span><p class="text-[11px] mt-0.5">24-hour reception desk on duty.</p></div><ol class="list-decimal list-inside space-y-2 text-xs pl-1"><li>Arrive at <strong>12 Kaishauri Street</strong> in Avlabari.</li><li>Ring the intercom bell at the main gate or enter reception through the front door.</li><li>Present your passport/ID to the front desk host, receive your room key, and get shown to your room.</li></ol></div>`,
+              KA: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">რეგისტრაციის დრო: 14:00-დან</span><p class="text-[11px] mt-0.5">ადმინისტრაცია მუშაობს 24 საათი.</p></div><ol class="list-decimal list-inside space-y-2 text-xs pl-1"><li>მობრძანდით მისამართზე: <strong>ქაიშაურის ქ. 12</strong> (ავლაბარი).</li><li>დარეკეთ ზარი ჭიშკარზე ან შემობრძანდით პირდაპირ რესეფშენში.</li><li>წარადგინეთ პირადობა/პასპორტი და მიიღეთ ოთახის გასაღები.</li></ol></div>`,
+              RU: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">Время заезда: с 14:00</span><p class="text-[11px] mt-0.5">Круглосуточная стойка регистрации 24/7.</p></div><ol class="list-decimal list-inside space-y-2 text-xs pl-1"><li>Адрес: <strong>ул. Кайшаури, 12</strong> (район Авлабари).</li><li>Позвоните в звонок у ворот или зайдите на ресепшн.</li><li>Предъявите паспорт для регистрации и получите ключи от номера.</li></ol></div>`
+            }
+          },
+          checkout: {
+            title: { EN: "Check-out Details", KA: "გასვლის პროცედურა", RU: "Правила выезда" },
+            html: {
+              EN: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">Check-Out: By 12:00</span></div><ul class="space-y-2 text-xs list-disc list-inside"><li>Return your room key to reception.</li><li>Store your luggage free of charge in our luggage room until evening departure.</li><li>Ask us if you need airport transfer arranged.</li></ul></div>`,
+              KA: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">გასვლის დრო: 12:00 საათამდე</span></div><ul class="space-y-2 text-xs list-disc list-inside"><li>ჩააბარეთ გასაღები რესეფშენში.</li><li>ბარგი შეგიძლიათ უფასოდ დატოვოთ საღამომდე ჩვენს საცავში.</li><li>საჭიროების შემთხვევაში შეგვიკვეთეთ აეროპორტის ტაქსი.</li></ul></div>`,
+              RU: `<div class="space-y-3"><div class="p-3 bg-amber-500/10 border border-brand-gold/30 rounded-xl"><span class="text-amber-500 dark:text-amber-300 font-bold block text-xs">Выезд: до 12:00</span></div><ul class="space-y-2 text-xs list-disc list-inside"><li>Сдайте ключи на ресепшн.</li><li>Багаж можно бесплатно оставить в камере хранения до вечера.</li><li>Трансфер в аэропорт можно заказать через WhatsApp.</li></ul></div>`
+            }
+          },
+          rules: {
+            title: { EN: "House Rules", KA: "შინაგანაწესი", RU: "Правила дома" },
+            html: {
+              EN: `<div class="space-y-2.5 text-xs"><p><strong>Quiet Hours:</strong> 23:00 – 08:00.</p><p><strong>Smoking:</strong> Strictly prohibited in all indoor rooms (permitted only in the garden/courtyard).</p><p><strong>Visitors:</strong> Non-registered guests allowed in common areas until 22:00.</p></div>`,
+              KA: `<div class="space-y-2.5 text-xs"><p><strong>სიმშვიდის საათები:</strong> 23:00 – 08:00.</p><p><strong>მოწევა:</strong> ოთახებში კატეგორიულად აკრძალულია (ნებადართულია მხოლოდ ეზოში).</p><p><strong>სტუმრები:</strong> გარეშე პირების ყოფნა საერთო სივრცეში დაშვებულია 22:00-მდე.</p></div>`,
+              RU: `<div class="space-y-2.5 text-xs"><p><strong>Часы тишины:</strong> с 23:00 до 08:00.</p><p><strong>Курение:</strong> строго запрещено во всех помещениях (курить можно только во внутреннем дворике).</p><p><strong>Гости:</strong> гости, не проживающие в отеле, могут находиться в общих зонах до 22:00.</p></div>`
+            }
+          },
+          amenities: {
+            title: { EN: "Amenities & Breakfast", KA: "სერვისები და საუზმე", RU: "Удобства и завтрак" },
+            html: {
+              EN: `<div class="space-y-2.5 text-xs"><p><strong>Breakfast:</strong> Available daily upon request in the courtyard dining room.</p><p><strong>Kitchen & Tea:</strong> Complimentary Georgian tea and coffee in the shared kitchen 24/7.</p><p><strong>Climate Control:</strong> AC remote in your room; please turn off when going out.</p></div>`,
+              KA: `<div class="space-y-2.5 text-xs"><p><strong>საუზმე:</strong> ხელმისაწვდომია მოთხოვნით ეზოს სასადილოში.</p><p><strong>სამზარეულო:</strong> უფასო ქართული ჩაი და ყავა საერთო სამზარეულოში 24/7.</p><p><strong>კონდიცირება:</strong> მართვა ოთახის პულტით; გთხოვთ გამორთოთ გასვლისას.</p></div>`,
+              RU: `<div class="space-y-2.5 text-xs"><p><strong>Завтрак:</strong> подается по запросу в уютной столовой.</p><p><strong>Кухня и чай:</strong> бесплатный грузинский чай и кофе на кухне круглосуточно.</p><p><strong>Кондиционер:</strong> пульт на стене; выключайте при выходе из номера.</p></div>`
+            }
+          },
+          transport: {
+            title: { EN: "Airport Transfers & Metro", KA: "ტრანსფერი და მეტრო", RU: "Трансфер и транспорт" },
+            html: {
+              EN: `<div class="space-y-2.5 text-xs"><p><strong>Airport Transfer:</strong> Fixed-rate direct transfer available on request via WhatsApp.</p><p><strong>Avlabari Metro:</strong> 7 minutes walk downhill from the hostel.</p><p><strong>Bolt Taxi:</strong> The recommended way to explore Tbilisi quickly.</p></div>`,
+              KA: `<div class="space-y-2.5 text-xs"><p><strong>აეროპორტის ტრანსფერი:</strong> ფიქსირებული ტარიფით შეკვეთა პირდაპირ WhatsApp-ში.</p><p><strong>ავლაბრის მეტრო:</strong> 7 წუთის სავალი ფეხით.</p><p><strong>Bolt ტაქსი:</strong> საუკეთესო და სწრაფი გადაადგილების საშუალება ქალაქში.</p></div>`,
+              RU: `<div class="space-y-2.5 text-xs"><p><strong>Трансфер в аэропорт:</strong> подача авто по фиксированной цене через WhatsApp.</p><p><strong>Метро Авлабари:</strong> 7 минут пешком вниз по улице.</p><p><strong>Такси Bolt:</strong> самый быстрый и прозрачный способ поездок.</p></div>`
+            }
+          },
+          luggage: {
+            title: { EN: "Luggage Storage", KA: "ბარგის შენახვა", RU: "Хранение багажа" },
+            html: {
+              EN: `<div class="space-y-2 text-xs"><p>Free luggage storage at reception before check-in and after check-out. You are welcome to use our Wi-Fi and common lounge while waiting.</p></div>`,
+              KA: `<div class="space-y-2 text-xs"><p>უფასო ბარგის საცავი რესეფშენში ჩასვლამდე და გასვლის შემდეგ. შეგიძლიათ ისარგებლოთ Wi-Fi-ით და მოსასვენებელი ოთახით.</p></div>`,
+              RU: `<div class="space-y-2 text-xs"><p>Бесплатная камера хранения до заселения и после выезда. Вы можете пользоваться лаунджем и Wi-Fi в ожидании рейса.</p></div>`
+            }
+          }
+        },
+        places: [
+          {
+            name: "Brewio Old Town Coffee",
+            category: "drink",
+            rating: "5.0",
+            dist: { EN: "2 min walk", KA: "2 წთ ფეხით", RU: "2 мин пешком" },
+            desc: {
+              EN: "Specialty brew bar with flat whites & fresh pastries.",
+              KA: "სპეციალიზებული ყავის ბარი და ახალი ნამცხვრები.",
+              RU: "Спешелти кофейня со свежей выпечкой."
+            },
+            query: "Brewio+Old+Town+Coffee+Tbilisi",
+            tag: { EN: "Coffee", KA: "ყავა", RU: "Кофе" },
+            img: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Georgia Kitchen IRIONI",
+            category: "eat",
+            rating: "4.8",
+            dist: { EN: "4 min walk", KA: "4 წთ ფეხით", RU: "4 мин пешком" },
+            desc: {
+              EN: "Juicy handmade khinkali and mtsvadi in Avlabari.",
+              KA: "ავთენტური ხინკალი და მწვადი ავლაბარში.",
+              RU: "Сочные домашние хинкали и сочный шашлык."
+            },
+            query: "IRIONI+Restaurant+Avlabari+Tbilisi",
+            tag: { EN: "Georgian", KA: "ქართული", RU: "Грузинская" },
+            img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Holy Trinity Cathedral (Sameba)",
+            category: "visit",
+            rating: "4.9",
+            dist: { EN: "5 min walk", KA: "5 წთ ფეხით", RU: "5 мин пешком" },
+            desc: {
+              EN: "Georgia's monumental cathedral with golden dome & gardens.",
+              KA: "სამების საკათედრო ტაძარი ულამაზესი ხედებით.",
+              RU: "Главный кафедральный собор Грузии с панорамой."
+            },
+            query: "Holy+Trinity+Cathedral+Tbilisi",
+            tag: { EN: "Must See", KA: "ღირსშესანიშნაობა", RU: "Локация" },
+            img: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Airport & Station Shuttle",
+            category: "transport",
+            rating: "5.0",
+            dist: { EN: "Doorstep", KA: "კართან", RU: "От входа" },
+            desc: {
+              EN: "Fixed-fare airport pickup arranged by host.",
+              KA: "აეროპორტის ტრანსფერი შეკვეთით მასპინძელთან.",
+              RU: "Трансфер в аэропорт напрямую от хозяев."
+            },
+            query: "Tbilisi+Airport+Shuttle",
+            tag: { EN: "Transfer", KA: "ტრანსფერი", RU: "Трансфер" },
+            img: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=300&q=80"
+          }
+        ]
+      },
+
+      when_in_tbilisi: {
+        id: "when_in_tbilisi",
+        name: {
+          EN: "Guest House When in Tbilisi",
+          KA: "სასტუმრო სახლი When in Tbilisi",
+          RU: "Гостевой дом When in Tbilisi"
+        },
+        badge: {
+          EN: "4.9 ★ Central Railway & Station Square",
+          KA: "4.9 ★ სადგურის მოედანთან",
+          RU: "4.9 ★ Возле Ж/Д Вокзала"
+        },
+        address: "18 Gogi Dolidze St, Tbilisi",
+        mapsQuery: "18+Gogi+Dolidze+St+Tbilisi",
+        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80",
+        wifi: {
+          ssid: "WhenInTbilisi_FastWiFi",
+          pass: "TbilisiStay2026"
+        },
+        host: {
+          name: "Keti",
+          initials: "KT",
+          role: {
+            EN: "Owner & Host",
+            KA: "მეპატრონე და მასპინძელი",
+            RU: "Хозяйка дома"
+          },
+          phone: "+995599176827",
+          phoneDisplay: "+995 599 17 68 27",
+          whatsapp: "995599176827",
+          welcome: {
+            EN: "Welcome to Guest House When in Tbilisi! Right by Central Railway. Use this guide to easily navigate the neighborhood, connect to Wi-Fi, and experience local food.",
+            KA: "კეთილი იყოს თქვენი მობრძანება When in Tbilisi-ში! ცენტრალურ სადგურთან ახლოს. გამოიყენეთ ეს გზამკვლევი კომფორტული დასვენებისთვის.",
+            RU: "Добро пожаловать в When in Tbilisi! Мы находимся рядом с главным вокзалом. Этот гид поможет быстро освоиться и узнать лучшие места района."
+          }
+        },
+        times: { checkin: "12:00 - 23:30", checkout: "05:00 - 11:00" },
+        modals: {
+          checkin: {
+            title: { EN: "Check-in: 12:00 - 23:30", KA: "რეგისტრაცია: 12:00 - 23:30", RU: "Заезд: 12:00 - 23:30" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Arrive at 18 Gogi Dolidze St. Message Keti on WhatsApp upon arrival and collect your keys at reception.</div>`,
+              KA: `<div class="text-xs space-y-2">მობრძანდით გოგი დოლიძის ქუჩა 18-ში. მოგვწერეთ WhatsApp-ში და მიიღეთ გასაღები.</div>`,
+              RU: `<div class="text-xs space-y-2">ул. Гоги Долидзе, 18. Напишите Кети в WhatsApp по прибытию и заберите ключи.</div>`
+            }
+          },
+          checkout: {
+            title: { EN: "Check-out: 05:00 - 11:00", KA: "გასვლა: 05:00 - 11:00", RU: "Выезд: 05:00 - 11:00" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Early check-out supported for train travelers. Leave keys at reception counter.</div>`,
+              KA: `<div class="text-xs space-y-2">ადრეული გასვლა მატარებლის მგზავრებისთვის ხელმისაწვდომია. გასაღები დატოვეთ დახლზე.</div>`,
+              RU: `<div class="text-xs space-y-2">Ранний выезд доступен для пассажиров утренних поездов. Оставьте ключи на стойке.</div>`
+            }
+          },
+          rules: {
+            title: { EN: "House Rules", KA: "წესები", RU: "Правила" },
+            html: {
+              EN: `<div class="text-xs space-y-2"><p>• Quiet hours: 23:00 - 08:00.<br>• Clean up dishes in shared kitchen.<br>• Non-smoking indoors.</p></div>`,
+              KA: `<div class="text-xs space-y-2"><p>• სიმშვიდის საათები: 23:00 - 08:00.<br>• დაიცავით სისუფთავე სამზარეულოში.<br>• მოწევა აკრძალულია შენობაში.</p></div>`,
+              RU: `<div class="text-xs space-y-2"><p>• Тишина: 23:00 - 08:00.<br>• Порядок на общей кухне.<br>• Курение в номерах запрещено.</p></div>`
+            }
+          },
+          amenities: {
+            title: { EN: "Kitchen & Facilities", KA: "სამზარეულო და სერვისები", RU: "Кухня и сервисы" },
+            html: {
+              EN: `<div class="text-xs space-y-2"><p>Shared kitchen fully equipped for cooking with refrigerator and kettle.</p></div>`,
+              KA: `<div class="text-xs space-y-2"><p>საერთო სამზარეულო აღჭურვილია გაზქურით, მაცივრით და ჩაიდნით.</p></div>`,
+              RU: `<div class="text-xs space-y-2"><p>Общая кухня полностью оборудована для готовки, есть чайник и холодильник.</p></div>`
+            }
+          },
+          transport: {
+            title: { EN: "Railway & Station Square", KA: "ცენტრალური ვაგზალი", RU: "Вокзал и транспорт" },
+            html: {
+              EN: `<div class="text-xs space-y-2"><p>8-minute walk to Tbilisi Central Railway Station and Station Square Metro.</p></div>`,
+              KA: `<div class="text-xs space-y-2"><p>8 წუთის სავალზეა თბილისის ცენტრალური სადგური და მეტრო.</p></div>`,
+              RU: `<div class="text-xs space-y-2"><p>8 минут пешком до вокзала Тбилиси-Централ и узловой станции метро.</p></div>`
+            }
+          },
+          luggage: {
+            title: { EN: "Free Luggage Drop", KA: "ბარგის შენახვა", RU: "Хранение багажа" },
+            html: {
+              EN: `<div class="text-xs space-y-2"><p>Arrived early on the night train? Drop your bags with us for free.</p></div>`,
+              KA: `<div class="text-xs space-y-2"><p>ჩამოხვედით ღამის მატარებლით? დატოვეთ ბარგი უფასოდ.</p></div>`,
+              RU: `<div class="text-xs space-y-2"><p>Приехали ранним поездом? Оставьте вещи в доме бесплатно.</p></div>`
+            }
+          }
+        },
+        places: [
+          {
+            name: "Dezerter Bazaar",
+            category: "visit",
+            rating: "4.7",
+            dist: { EN: "6 min walk", KA: "6 წთ ფეხით", RU: "6 мин пешком" },
+            desc: {
+              EN: "Famous historic farmers market with spices, cheese & fruit.",
+              KA: "დეზერტირების ბაზარი - უგემრიელესი ჩურჩხელა და ყველი.",
+              RU: "Знаменитый колоритный Дезертирский рынок."
+            },
+            query: "Dezerter+Bazaar+Tbilisi",
+            tag: { EN: "Market", KA: "ბაზარი", RU: "Рынок" },
+            img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "47 Restaurant",
+            category: "eat",
+            rating: "4.8",
+            dist: { EN: "7 min walk", KA: "7 წთ ფეხით", RU: "7 мин пешком" },
+            desc: {
+              EN: "Traditional clay pot stews and homemade pitcher wine.",
+              KA: "ქართული კერძები თიხის ქოთანში და კარგი ღვინო.",
+              RU: "Традиционные грузинские блюда в кеци и домашнее вино."
+            },
+            query: "47+Restaurant+Tbilisi",
+            tag: { EN: "Dine", KA: "სადილი", RU: "Обед" },
+            img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=300&q=80"
+          }
+        ]
+      },
+
+      lea: {
+        id: "lea",
+        name: {
+          EN: "Guest House Lea",
+          KA: "სასტუმრო სახლი Lea",
+          RU: "Гостевой дом Lea"
+        },
+        badge: {
+          EN: "4.8 ★ Old Tbilisi Sulfur District",
+          KA: "4.8 ★ გოგირდის აბანოებთან",
+          RU: "4.8 ★ Возле Серных Бань"
+        },
+        address: "25 Ioseb Grishashvili St, Tbilisi 0105",
+        mapsQuery: "25+Ioseb+Grishashvili+St+Tbilisi",
+        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80",
+        wifi: {
+          ssid: "GuestHouse_Lea",
+          pass: "LeaOldTown2026"
+        },
+        host: {
+          name: "Lea",
+          initials: "LA",
+          role: {
+            EN: "Resident Host",
+            KA: "მასპინძელი",
+            RU: "Хозяйка дома"
+          },
+          phone: "+995577104747",
+          phoneDisplay: "+995 577 10 47 47",
+          whatsapp: "995577104747",
+          welcome: {
+            EN: "Welcome to Guest House Lea! From here, the world-famous sulfur baths and historic Old Tbilisi streets are just steps away.",
+            KA: "მოგესალმებით სასტუმრო სახლ Lea-ში! ცნობილი გოგირდის აბანოები და ძველი თბილისის ქუჩები თქვენს გვერდითაა.",
+            RU: "Добро пожаловать в Guest House Lea! Всего несколько шагов отделяют вас от знаменитых серных бань и старого города."
+          }
+        },
+        times: { checkin: "14:00", checkout: "11:30" },
+        modals: {
+          checkin: {
+            title: { EN: "Check-in at Lea", KA: "რეგისტრაცია", RU: "Заезд" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Please message on WhatsApp 15 minutes prior to arrival so Lea can welcome you at the historic courtyard entrance.</div>`,
+              KA: `<div class="text-xs space-y-2">გთხოვთ მოგვწეროთ მოსვლამდე 15 წუთით ადრე, რათა დაგხვდეთ ეზოს შესასვლელთან.</div>`,
+              RU: `<div class="text-xs space-y-2">Пожалуйста, напишите за 15 минут до прибытия, чтобы хозяйка встретила вас во дворе.</div>`
+            }
+          },
+          checkout: {
+            title: { EN: "Check-out: 11:30", KA: "გასვლა: 11:30", RU: "Выезд: 11:30" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Check-out by 11:30 AM. Bag holding in the hall is complimentary.</div>`,
+              KA: `<div class="text-xs space-y-2">გასვლა 11:30 საათამდე. ბარგის დატოვება შესაძლებელია უფასოდ.</div>`,
+              RU: `<div class="text-xs space-y-2">Выезд до 11:30. Багаж можно оставить в прихожей.</div>`
+            }
+          },
+          rules: {
+            title: { EN: "Courtyard Peace", KA: "ეზოს სიმშვიდე", RU: "Тишина во дворе" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Residential courtyard; quiet hours after 22:00. Non-smoking inside the rooms.</div>`,
+              KA: `<div class="text-xs space-y-2">საცხოვრებელი იტალიური ეზო; დაიცავით სიჩუმე 22:00-ის შემდეგ.</div>`,
+              RU: `<div class="text-xs space-y-2">Традиционный тбилисский двор. Тишина после 22:00. В комнатах не курят.</div>`
+            }
+          },
+          amenities: {
+            title: { EN: "Room Amenities", KA: "ოთახის აღჭურვილობა", RU: "В номере" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Private bath, electric kettle, wine glasses, hair dryer, heating and AC.</div>`,
+              KA: `<div class="text-xs space-y-2">ინდივიდუალური აბაზანა, ჩაიდანი, ღვინის ჭიქები, გათბობა და კონდიცირება.</div>`,
+              RU: `<div class="text-xs space-y-2">Личная ванная, электрочайник, бокалы для вина, фен, кондиционер.</div>`
+            }
+          },
+          transport: {
+            title: { EN: "Old Town Walk", KA: "ტრანსპორტი", RU: "Прогулка по старому городу" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Taxis drop off at the courtyard gate. Avlabari metro is 1.3 km away.</div>`,
+              KA: `<div class="text-xs space-y-2">ტაქსი მოდის პირდაპირ ჭიშკრამდე. ავლაბრის მეტრო 1.3 კმ-შია.</div>`,
+              RU: `<div class="text-xs space-y-2">Такси подъезжает прямо к арке. До метро Авлабари около 1.3 км.</div>`
+            }
+          },
+          luggage: {
+            title: { EN: "Luggage", KA: "ბარგი", RU: "Багаж" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Free safe bag storage in the entrance corridor.</div>`,
+              KA: `<div class="text-xs space-y-2">ბარგის უსაფრთხო შენახვა უფასოდ.</div>`,
+              RU: `<div class="text-xs space-y-2">Бесплатное хранение вещей в коридоре у хозяев.</div>`
+            }
+          }
+        },
+        places: [
+          {
+            name: "Abanotubani Sulfur Baths",
+            category: "visit",
+            rating: "4.9",
+            dist: { EN: "4 min walk", KA: "4 წთ ფეხით", RU: "4 мин пешком" },
+            desc: {
+              EN: "Natural underground sulfur thermal baths.",
+              KA: "თბილისის უძველესი ბუნებრივი გოგირდის აბანოები.",
+              RU: "Исторические серные бани с целебной термальной водой."
+            },
+            query: "Abanotubani+Sulfur+Baths+Tbilisi",
+            tag: { EN: "Spa", KA: "აბანოები", RU: "Бани" },
+            img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Restaurant Iasamani",
+            category: "eat",
+            rating: "4.8",
+            dist: { EN: "6 min walk", KA: "6 წთ ფეხით", RU: "6 мин пешком" },
+            desc: {
+              EN: "Refined modern Georgian cuisine in an authentic Sololaki house.",
+              KA: "დახვეწილი ქართული სამზარეულო სოლოლაკში.",
+              RU: "Изысканная грузинская кухня в старинном особняке."
+            },
+            query: "Iasamani+Restaurant+Tbilisi",
+            tag: { EN: "Gourmet", KA: "რესტორანი", RU: "Ресторан" },
+            img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=300&q=80"
+          }
+        ]
+      },
+
+      amante: {
+        id: "amante",
+        name: {
+          EN: "Amante Narikala Boutique Hotel",
+          KA: "სასტუმრო Amante Narikala",
+          RU: "Отель Amante Narikala"
+        },
+        badge: {
+          EN: "4.7 ★ Rooftop Terrace & Fortress Views",
+          KA: "4.7 ★ ტერასა და ნარიყალას ხედები",
+          RU: "4.7 ★ Панорамная терраса у крепости"
+        },
+        address: "1 Gomi Street, Old Tbilisi 0105",
+        mapsQuery: "1+Gomi+Street+Tbilisi",
+        image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=900&q=80",
+        wifi: {
+          ssid: "Amante_Narikala_Guest",
+          pass: "NarikalaGuest"
+        },
+        host: {
+          name: "Amante Concierge",
+          initials: "AN",
+          role: {
+            EN: "Front Office Manager",
+            KA: "მთავარი ადმინისტრატორი",
+            RU: "Служба консьержей"
+          },
+          phone: "+995577010909",
+          phoneDisplay: "+995 577 010 909",
+          whatsapp: "995577010909",
+          welcome: {
+            EN: "Welcome to Amante Narikala! You are staying in the most atmospheric part of Old Tbilisi beneath the ancient fortress.",
+            KA: "მოგესალმებით Amante Narikala-ში! თქვენ იმყოფებით ძველი თბილისის გულში, ნარიყალას ციხესიმაგრის ძირას.",
+            RU: "Добро пожаловать в Amante Narikala! Вы остановились в самом сердце старого Тбилиси с лучшими видами на город."
+          }
+        },
+        times: { checkin: "15:00", checkout: "12:00" },
+        modals: {
+          checkin: {
+            title: { EN: "Check-in: 15:00", KA: "რეგისტრაცია: 15:00", RU: "Заезд: 15:00" },
+            html: {
+              EN: `<div class="text-xs space-y-2">24h reception desk. Keycard access provided upon ID verification. Luggage assistance provided.</div>`,
+              KA: `<div class="text-xs space-y-2">24-საათიანი რესეფშენი. გასაღებ-ბარათები გაიცემა პირადობის წარდგენისთანავე.</div>`,
+              RU: `<div class="text-xs space-y-2">Стойка регистрации 24/7. Электронные ключ-карты и помощь с багажом.</div>`
+            }
+          },
+          checkout: {
+            title: { EN: "Check-out: 12:00", KA: "გასვლა: 12:00", RU: "Выезд: 12:00" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Keycard drop at reception. Late check-out available upon inquiry.</div>`,
+              KA: `<div class="text-xs space-y-2">ბარათის დაბრუნება რესეფშენში. გვიანი გასვლა შესაძლებელია შეთანხმებით.</div>`,
+              RU: `<div class="text-xs space-y-2">Сдача карт на стойке. Поздний выезд по согласованию с портье.</div>`
+            }
+          },
+          rules: {
+            title: { EN: "Hotel Etiquette", KA: "სასტუმროს წესები", RU: "Правила отеля" },
+            html: {
+              EN: `<div class="text-xs space-y-2">100% smoke free inside. Rooftop terrace reserved exclusively for registered guests.</div>`,
+              KA: `<div class="text-xs space-y-2">მოწევა შენობაში აკრძალულია. სახურავის ტერასა განკუთვნილია მხოლოდ სტუმრებისთვის.</div>`,
+              RU: `<div class="text-xs space-y-2">Курение внутри строго запрещено. Панорамная крыша только для гостей.</div>`
+            }
+          },
+          amenities: {
+            title: { EN: "Rooftop & Breakfast", KA: "ტერასა და საუზმე", RU: "Панорама и завтрак" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Breakfast daily 08:00 - 11:00 on the terrace overlooking the city.</div>`,
+              KA: `<div class="text-xs space-y-2">საუზმე ყოველდღე 08:00-დან 11:00-მდე პანორამულ ტერასაზე.</div>`,
+              RU: `<div class="text-xs space-y-2">Завтрак "шведский стол" с 08:00 до 11:00 с панорамным видом.</div>`
+            }
+          },
+          transport: {
+            title: { EN: "Free Airport Transfer Offer", KA: "უფასო აეროპორტის ტრანსფერი", RU: "Бесплатный трансфер в аэропорт" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Under our direct booking promo, free transfer from hotel to airport is included! Inquire at front desk.</div>`,
+              KA: `<div class="text-xs space-y-2">პირდაპირი ჯავშნის აქციით, სასტუმროდან აეროპორტში ტრანსფერი უფასოა! მიმართეთ ადმინისტრატორს.</div>`,
+              RU: `<div class="text-xs space-y-2">По акции прямых бронирований трансфер в аэропорт предоставляется бесплатно!</div>`
+            }
+          },
+          luggage: {
+            title: { EN: "Concierge Luggage", KA: "ბარგის სერვისი", RU: "Багажный сервис" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Full bellman and locked storage available 24 hours.</div>`,
+              KA: `<div class="text-xs space-y-2">ბარგის დაცული საცავი ხელმისაწვდომია 24 საათი.</div>`,
+              RU: `<div class="text-xs space-y-2">Охраняемая багажная комната и консьерж 24/7.</div>`
+            }
+          }
+        },
+        places: [
+          {
+            name: "Narikala Fortress",
+            category: "visit",
+            rating: "4.8",
+            dist: { EN: "2 min walk", KA: "2 წთ ფეხით", RU: "2 мин пешком" },
+            desc: {
+              EN: "4th-century landmark with 360-degree city panorama.",
+              KA: "IV საუკუნის ნარიყალას ციხე და ულამაზესი პანორამა.",
+              RU: "Древняя крепость IV века с круговой панорамой Тбилиси."
+            },
+            query: "Narikala+Fortress+Tbilisi",
+            tag: { EN: "Fortress", KA: "ციხე", RU: "Крепость" },
+            img: "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Sebel Terrace 180°",
+            category: "drink",
+            rating: "4.9",
+            dist: { EN: "3 min walk", KA: "3 წთ ფეხით", RU: "3 мин пешком" },
+            desc: {
+              EN: "Fine Georgian natural wine selection & cocktails.",
+              KA: "ქართული ბუნებრივი ღვინო და კოქტეილები ხედით.",
+              RU: "Винный бар на склоне с шикарным вечерним видом."
+            },
+            query: "Sebel+Terrace+Tbilisi",
+            tag: { EN: "Wine Bar", KA: "ღვინო", RU: "Вино" },
+            img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=300&q=80"
+          }
+        ]
+      },
+
+      flower: {
+        id: "flower",
+        name: {
+          EN: "Hotel Flower",
+          KA: "სასტუმრო Hotel Flower",
+          RU: "Отель Flower"
+        },
+        badge: {
+          EN: "4.6 ★ Sololaki & Freedom Square",
+          KA: "4.6 ★ სოლოლაკი & თავისუფლების მოედანი",
+          RU: "4.6 ★ Сололаки и Площадь Свободы"
+        },
+        address: "36a Lado Asatiani Street, Tbilisi 0105",
+        mapsQuery: "36a+Lado+Asatiani+Street+Tbilisi",
+        image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=80",
+        wifi: {
+          ssid: "Hotel_Flower_Lobby",
+          pass: "FlowerTbilisi2026"
+        },
+        host: {
+          name: "Hotel Flower Front Desk",
+          initials: "HF",
+          role: {
+            EN: "Front Office Team",
+            KA: "ადმინისტრაცია",
+            RU: "Служба приема"
+          },
+          phone: "+995598688686",
+          phoneDisplay: "+995 598 688 686",
+          whatsapp: "995598688686",
+          welcome: {
+            EN: "Welcome to Hotel Flower! Just 6 minutes from Freedom Square in charming Sololaki. We hope you enjoy your stay.",
+            KA: "მოგესალმებით Hotel Flower-ში! სოლოლაკის გულში, თავისუფლების მოედნიდან 6 წუთის სავალზე. გისურვებთ სასიამოვნო დასვენებას.",
+            RU: "Добро пожаловать в отель Flower! Всего 6 минут до Площади Свободы по живописному Сололаки."
+          }
+        },
+        times: { checkin: "13:30", checkout: "12:00" },
+        modals: {
+          checkin: {
+            title: { EN: "Check-in: 13:30", KA: "რეგისტრაცია: 13:30", RU: "Заезд: 13:30" },
+            html: {
+              EN: `<div class="text-xs space-y-2">24h reception desk. Valid government photo ID or passport required.</div>`,
+              KA: `<div class="text-xs space-y-2">24-საათიანი რესეფშენი. აუცილებელია პასპორტის წარდგენა.</div>`,
+              RU: `<div class="text-xs space-y-2">Круглосуточный ресепшн. Потребуется паспорт для регистрации.</div>`
+            }
+          },
+          checkout: {
+            title: { EN: "Check-out: 12:00", KA: "გასვლა: 12:00", RU: "Выезд: 12:00" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Leave keycards at reception desk by 12:00 noon.</div>`,
+              KA: `<div class="text-xs space-y-2">ჩააბარეთ ბარათი რესეფშენში დღის 12:00 საათამდე.</div>`,
+              RU: `<div class="text-xs space-y-2">Сдайте электронные ключи до 12:00.</div>`
+            }
+          },
+          rules: {
+            title: { EN: "House Rules", KA: "სასტუმროს წესები", RU: "Правила проживания" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Quiet hours after 23:00. Non-smoking property indoors.</div>`,
+              KA: `<div class="text-xs space-y-2">სიმშვიდის საათები 23:00-ის შემდეგ. მოწევა აკრძალულია.</div>`,
+              RU: `<div class="text-xs space-y-2">Режим тишины с 23:00. Курение в отеле запрещено.</div>`
+            }
+          },
+          amenities: {
+            title: { EN: "Parking & Breakfast", KA: "პარკინგი და საუზმე", RU: "Парковка и завтрак" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Private parking available on site. Buffet breakfast served in dining hall.</div>`,
+              KA: `<div class="text-xs space-y-2">საკუთარი პარკინგი და საუზმე სასტუმროს სასადილოში.</div>`,
+              RU: `<div class="text-xs space-y-2">Собственная парковка и континентальный завтрак.</div>`
+            }
+          },
+          transport: {
+            title: { EN: "Freedom Square Access", KA: "თავისუფლების მოედანი", RU: "Площадь Свободы" },
+            html: {
+              EN: `<div class="text-xs space-y-2">6 minutes stroll down to Freedom Square Metro and Rustaveli Avenue.</div>`,
+              KA: `<div class="text-xs space-y-2">6 წუთის სავალი თავისუფლების მოედნამდე და მეტრომდე.</div>`,
+              RU: `<div class="text-xs space-y-2">6 минут неспешной прогулки до метро Площадь Свободы.</div>`
+            }
+          },
+          luggage: {
+            title: { EN: "Luggage Drop", KA: "ბარგი", RU: "Багаж" },
+            html: {
+              EN: `<div class="text-xs space-y-2">Free luggage storage at reception lobby.</div>`,
+              KA: `<div class="text-xs space-y-2">უფასო ბარგის შენახვა სასტუმროს ფოიეში.</div>`,
+              RU: `<div class="text-xs space-y-2">Бесплатное хранение вещей в холле отеля.</div>`
+            }
+          }
+        },
+        places: [
+          {
+            name: "Freedom Square & Rustaveli",
+            category: "visit",
+            rating: "4.8",
+            dist: { EN: "6 min walk", KA: "6 წთ ფეხით", RU: "6 мин пешком" },
+            desc: {
+              EN: "The epicenter of Tbilisi with museums & shopping.",
+              KA: "თბილისის მთავარი მოედანი, მუზეუმები და მაღაზიები.",
+              RU: "Центральная площадь, музеи и проспект Руставели."
+            },
+            query: "Freedom+Square+Tbilisi",
+            tag: { EN: "Center", KA: "ცენტრი", RU: "Центр" },
+            img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=300&q=80"
+          },
+          {
+            name: "Cafe Sololaki",
+            category: "drink",
+            rating: "4.7",
+            dist: { EN: "3 min walk", KA: "3 წთ ფეხით", RU: "3 мин пешком" },
+            desc: {
+              EN: "Bohemian terrace cafe with Georgian desserts.",
+              KA: "მყუდრო კაფე სოლოლაკში ტერასით და დესერტებით.",
+              RU: "Уютное атмосферное кафе с террасой и десертами."
+            },
+            query: "Cafe+Sololaki+Tbilisi",
+            tag: { EN: "Cafe", KA: "კაფე", RU: "Кафе" },
+            img: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=300&q=80"
+          }
+        ]
+      }
+    };
+
+    // Application State Variables
+    let currentPropId = "elia";
+    let currentLang = "EN";
+    let activeCategory = "all";
+    let qrRendered = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Initialize Theme from localStorage or system preference
+      const savedTheme = localStorage.getItem("stumari_theme") || "dark";
+      applyTheme(savedTheme);
+
+      // 2. Initialize Language from localStorage
+      const savedLang = localStorage.getItem("stumari_lang") || "EN";
+      setLanguage(savedLang, false);
+
+      // 3. Load Active Property
+      loadProperty(currentPropId);
+      buildPropertyPickerList();
+
+      // Setup Listeners
+      document.getElementById("themeToggleBtn").addEventListener("click", toggleTheme);
+      document.getElementById("openLangBtn").addEventListener("click", openLangPicker);
+      document.getElementById("switchPropBtn").addEventListener("click", openPropPicker);
+      document.getElementById("openWifiQrModalBtn").addEventListener("click", openQrModal);
+
+      // Wi-Fi Copy
+      document.getElementById("copyWifiPasswordBtn").addEventListener("click", () => {
+        const pass = PROPERTIES_DATA[currentPropId].wifi.pass;
+        copyToClipboard(pass);
+        showToast(I18N[currentLang].copiedToast);
+      });
+
+      // Close modals on outside click
+      document.getElementById("modalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "modalBackdrop") closeModal();
+      });
+      document.getElementById("qrModalBackdrop").addEventListener("click", (e) => {
+        if (e.target.id === "qrModalBackdrop") closeQrModal();
+      });
+      document.getElementById("propPickerModal").addEventListener("click", (e) => {
+        if (e.target.id === "propPickerModal") closePropPicker();
+      });
+      document.getElementById("langPickerModal").addEventListener("click", (e) => {
+        if (e.target.id === "langPickerModal") closeLangPicker();
+      });
+    });
+
+    // Theme Management
+    function applyTheme(theme) {
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      localStorage.setItem("stumari_theme", theme);
+      lucide.createIcons();
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains("dark");
+      applyTheme(isDark ? "light" : "dark");
+    }
+
+    // Language Management
+    function setLanguage(langCode, updateStorage = true) {
+      currentLang = langCode;
+      if (updateStorage) localStorage.setItem("stumari_lang", langCode);
+
+      // Update flag & label
+      const flags = { EN: "🇬🇧", KA: "🇬🇪", RU: "🌐" };
+      document.getElementById("langFlag").innerText = flags[langCode] || "🇬🇧";
+      document.getElementById("currentLangCode").innerText = langCode;
+
+      // Apply I18N to DOM elements with data-i18n
+      const dict = I18N[langCode];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      // Re-render active property data to reflect language change
+      loadProperty(currentPropId);
+      closeLangPicker();
+    }
+
+    function openLangPicker() {
+      const modal = document.getElementById("langPickerModal");
+      modal.classList.remove("pointer-events-none", "opacity-0");
+      modal.classList.add("opacity-100");
+    }
+
+    function closeLangPicker() {
+      const modal = document.getElementById("langPickerModal");
+      modal.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    function loadProperty(propKey) {
+      currentPropId = propKey;
+      const data = PROPERTIES_DATA[propKey];
+      if (!data) return;
+
+      const propName = data.name[currentLang] || data.name.EN;
+      const propBadge = data.badge[currentLang] || data.badge.EN;
+      const hostWelcome = data.host.welcome[currentLang] || data.host.welcome.EN;
+      const hostRole = data.host.role[currentLang] || data.host.role.EN;
+
+      // Header label
+      document.getElementById("currentPropertyLabel").innerText = propName.split(" ")[0];
+      
+      // Hero
+      document.getElementById("propertyName").innerText = propName;
+      document.getElementById("propertyBadge").innerText = propBadge;
+      document.getElementById("propertyAddress").innerText = data.address;
+      document.getElementById("propertyHeroImg").src = data.image;
+
+      // Address Trigger
+      document.getElementById("heroAddressBtn").onclick = () => {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.mapsQuery)}`, '_blank');
+      };
+
+      // Wi-Fi
+      document.getElementById("wifiSsidDisplay").innerText = data.wifi.ssid;
+      document.getElementById("wifiPasswordText").innerText = data.wifi.pass;
+      document.getElementById("qrSsidLabel").innerText = data.wifi.ssid;
+      qrRendered = false; // regenerate on next modal open
+
+      // Host
+      document.getElementById("hostAvatar").innerText = data.host.initials;
+      document.getElementById("hostTitle").innerText = `${data.host.name}:`;
+      document.getElementById("hostWelcomeMessage").innerText = hostWelcome;
+
+      // Check-in / Check-out Times
+      document.getElementById("gridCheckinTime").innerText = data.times.checkin;
+      document.getElementById("gridCheckoutTime").innerText = data.times.checkout;
+
+      // Help Tab Details
+      document.getElementById("helpHostInitials").innerText = data.host.initials;
+      document.getElementById("helpHostName").innerText = data.host.name;
+      document.getElementById("helpHostRole").innerText = hostRole;
+      
+      // WhatsApp message prefill
+      const prefillMsg = encodeURIComponent(
+        currentLang === 'KA' 
+          ? `გამარჯობა ${data.host.name}, მე ვარ თქვენი სტუმარი STUMARI-ს გზამკვლევიდან:`
+          : currentLang === 'RU'
+          ? `Здравствуйте ${data.host.name}! Я ваш гость из гида STUMARI:`
+          : `Hello ${data.host.name}! I am a guest staying at ${propName}:`
+      );
+      document.getElementById("helpWhatsappBtn").href = `https://wa.me/${data.host.whatsapp}?text=${prefillMsg}`;
+      document.getElementById("helpPhoneBtn").href = `tel:${data.host.phone}`;
+
+      // Render Recommendations
+      renderHighlights(data.places);
+      renderExploreList(data.places);
+
+      lucide.createIcons();
+    }
+
+    // Mini Horizontal Highlights on Home Screen
+    function renderHighlights(places) {
+      const container = document.getElementById("homeMiniHighlights");
+      container.innerHTML = "";
+
+      places.slice(0, 4).forEach(place => {
+        const placeDesc = place.desc[currentLang] || place.desc.EN;
+        const placeDist = place.dist[currentLang] || place.dist.EN;
+
+        const card = document.createElement("div");
+        card.className = "item-card min-w-[195px] max-w-[195px] rounded-2xl p-2.5 flex flex-col justify-between flex-shrink-0 transition";
+        card.innerHTML = `
+          <div>
+            <div class="relative h-24 rounded-xl overflow-hidden mb-2">
+              <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover">
+              <span class="absolute top-1.5 right-1.5 bg-black/75 backdrop-blur-sm text-amber-300 text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center space-x-0.5">
+                <span>★</span>
+                <span>${place.rating}</span>
+              </span>
+            </div>
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 text-xs truncate">${place.name}</h4>
+            <p class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold mt-0.5">${placeDist}</p>
+          </div>
+          <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.query)}', '_blank')" class="mt-2.5 w-full py-1 text-[11px] font-bold rounded-lg bg-stone-200/80 hover:bg-stone-300 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 flex items-center justify-center space-x-1 transition">
+            <i data-lucide="map-pin" class="w-3 h-3 text-amber-500"></i>
+            <span>${I18N[currentLang].openMapsBtn}</span>
+          </button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Explore Screen Filtered List
+    function renderExploreList(places) {
+      const container = document.getElementById("explorePlacesList");
+      container.innerHTML = "";
+
+      const filtered = activeCategory === "all" ? places : places.filter(p => p.category === activeCategory);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-stone-400 text-xs">No spots in this category. Ask your host for secret spots!</div>`;
+        return;
+      }
+
+      filtered.forEach(place => {
+        const placeDesc = place.desc[currentLang] || place.desc.EN;
+        const placeDist = place.dist[currentLang] || place.dist.EN;
+        const placeTag = place.tag[currentLang] || place.tag.EN;
+
+        const item = document.createElement("div");
+        item.className = "item-card p-3 rounded-2xl flex items-center space-x-3 transition";
+        item.innerHTML = `
+          <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 relative">
+            <img src="${place.img}" alt="${place.name}" class="w-full h-full object-cover">
+            <span class="absolute top-1 left-1 bg-black/80 text-amber-300 text-[9px] font-bold px-1 rounded">
+              ★ ${place.rating}
+            </span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold tracking-wider text-amber-600 dark:text-amber-400">${placeTag}</span>
+              <span class="text-[10px] text-stone-500 dark:text-stone-400">${placeDist}</span>
+            </div>
+            <h4 class="font-serif font-bold text-sm text-stone-900 dark:text-stone-100 truncate mt-0.5">${place.name}</h4>
+            <p class="text-xs text-stone-600 dark:text-stone-400 line-clamp-2 mt-0.5">${placeDesc}</p>
+            <div class="mt-2">
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.query)}" target="_blank" class="inline-flex items-center space-x-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline">
+                <i data-lucide="map-pin" class="w-3 h-3 text-amber-500"></i>
+                <span>${I18N[currentLang].openMapsBtn}</span>
+              </a>
+            </div>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function setExploreFilter(category) {
+      activeCategory = category;
+      document.querySelectorAll(".cat-filter-btn").forEach(btn => {
+        btn.classList.remove("active", "bg-amber-500", "text-stone-950");
+        btn.classList.add("bg-stone-200", "dark:bg-stone-800", "text-stone-700", "dark:text-stone-300");
+      });
+
+      event.target.classList.add("active", "bg-amber-500", "text-stone-950");
+      event.target.classList.remove("bg-stone-200", "dark:bg-stone-800", "text-stone-700", "dark:text-stone-300");
+
+      renderExploreList(PROPERTIES_DATA[currentPropId].places);
+    }
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-view").forEach(el => el.classList.add("hidden"));
+      document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+
+      document.querySelectorAll(".nav-item").forEach(btn => {
+        btn.classList.remove("text-amber-500", "dark:text-brand-gold", "active");
+        btn.classList.add("text-stone-400");
+      });
+
+      const activeNav = document.getElementById(`nav-btn-${tabId}`);
+      if (activeNav) {
+        activeNav.classList.add("text-amber-500", "dark:text-brand-gold", "active");
+        activeNav.classList.remove("text-stone-400");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Modal Sheet Controllers
+    function openModal(modalKey) {
+      const prop = PROPERTIES_DATA[currentPropId];
+      const modalData = prop.modals[modalKey];
+      if (!modalData) return;
+
+      const title = modalData.title[currentLang] || modalData.title.EN;
+      const htmlContent = modalData.html[currentLang] || modalData.html.EN;
+
+      document.getElementById("modalTitle").innerText = title;
+      document.getElementById("modalBody").innerHTML = htmlContent;
+
+      const backdrop = document.getElementById("modalBackdrop");
+      const sheet = document.getElementById("modalSheet");
+
+      backdrop.classList.remove("pointer-events-none", "opacity-0");
+      backdrop.classList.add("opacity-100");
+      sheet.classList.remove("translate-y-full");
+
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      const backdrop = document.getElementById("modalBackdrop");
+      const sheet = document.getElementById("modalSheet");
+
+      sheet.classList.add("translate-y-full");
+      backdrop.classList.remove("opacity-100");
+      backdrop.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    // Wi-Fi QR Modal
+    function openQrModal() {
+      const prop = PROPERTIES_DATA[currentPropId];
+      const qrContainer = document.getElementById("qrcode");
+      
+      if (!qrRendered) {
+        qrContainer.innerHTML = "";
+        // Standard Wi-Fi connection barcode format:
+        const wifiQrPayload = `WIFI:S:${prop.wifi.ssid};T:WPA;P:${prop.wifi.pass};;`;
+        new QRCode(qrContainer, {
+          text: wifiQrPayload,
+          width: 170,
+          height: 170,
+          colorDark: "#111519",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        qrRendered = true;
+      }
+
+      const backdrop = document.getElementById("qrModalBackdrop");
+      const box = document.getElementById("qrModalBox");
+      backdrop.classList.remove("pointer-events-none", "opacity-0");
+      backdrop.classList.add("opacity-100");
+      box.classList.remove("scale-95");
+      box.classList.add("scale-100");
+    }
+
+    function closeQrModal() {
+      const backdrop = document.getElementById("qrModalBackdrop");
+      const box = document.getElementById("qrModalBox");
+      box.classList.remove("scale-100");
+      box.classList.add("scale-95");
+      backdrop.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    // Property Switcher Modal
+    function buildPropertyPickerList() {
+      const list = document.getElementById("propertyOptionsList");
+      list.innerHTML = "";
+
+      Object.keys(PROPERTIES_DATA).forEach(key => {
+        const prop = PROPERTIES_DATA[key];
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left p-3 rounded-xl bg-stone-100 dark:bg-stone-900/80 hover:bg-amber-500/10 border border-stone-200 dark:border-stone-800 transition flex items-center justify-between";
+        btn.innerHTML = `
+          <div>
+            <h4 class="font-bold text-xs text-stone-900 dark:text-stone-100">${prop.name.EN}</h4>
+            <p class="text-[10px] text-stone-500 dark:text-stone-400">${prop.badge.EN}</p>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-stone-400"></i>
+        `;
+        btn.onclick = () => {
+          loadProperty(key);
+          closePropPicker();
+          showToast(`Loaded: ${prop.name[currentLang] || prop.name.EN}`);
+        };
+        list.appendChild(btn);
+      });
+    }
+
+    function openPropPicker() {
+      const modal = document.getElementById("propPickerModal");
+      modal.classList.remove("pointer-events-none", "opacity-0");
+      modal.classList.add("opacity-100");
+    }
+
+    function closePropPicker() {
+      const modal = document.getElementById("propPickerModal");
+      modal.classList.add("opacity-0", "pointer-events-none");
+    }
+
+    // Safe Cross-Platform Copy to Clipboard
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).catch(() => execFallbackCopy(text));
+      } else {
+        execFallbackCopy(text);
+      }
+    }
+
+    function execFallbackCopy(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      tempInput.style.position = "fixed";
+      tempInput.style.left = "-99999px";
+      document.body.appendChild(tempInput);
+      tempInput.focus();
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+      } catch (e) {
+        console.error("Copy failed", e);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById("toastNotification");
+      document.getElementById("toastMsg").innerText = msg;
+      toast.classList.remove("hidden");
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 2300);
+    }
+  </script>
+</body>
+</html>
